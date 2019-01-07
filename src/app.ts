@@ -1,17 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
-const app = express();
-const bodyParser = require('body-parser');
-const user_model = require('./models/user');
-const routes = require('./routes/user-routes');
+const app = express(),
+    bodyParser = require('body-parser'),
+    user_schema = require('./models/user-schema'),
+    routes = require('./routes/user-routes'),
+    port = process.env.PORT || 3000;
 
-app.use((bodyParser.urlencoded({extended: true})));
 app.use(bodyParser.json());
-
-mongoose.connect('mongodb://localhost:27017/GCave', { useNewUrlParser: true });
-
+    
 routes(app);
 
-const port = process.env.PORT || 3000;
-app.listen(port);
+mongoose.connect('mongodb://localhost:27017/GCave', { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Connection Error: '));
+db.on('open', () => {
+    app.listen(port);
+});
