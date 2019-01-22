@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
-
-const User = mongoose.model('userSchema');
+const user_schema = require('../models/user-schema');
+const User = mongoose.model('User');
 
 const user_functions = {
+
     create_user: (req: any, res: any) => {
         let new_user = new User(req.body);
         
